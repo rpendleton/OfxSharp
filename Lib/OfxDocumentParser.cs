@@ -203,10 +203,14 @@ namespace OfxSharpLib
         /// <returns>OFX File in XML format</returns>
         private string SgmltoXml(string file)
         {
+            var assembly = this.GetType().Assembly;
+            var docType = assembly.GetManifestResourceStream("OfxSharpLib.ofx160.dtd");
+
             var reader = new SgmlReader
             {
                 InputStream = new StringReader(ParseHeader(file)),
-                DocType = "OFX"
+                DocType = "OFX",
+                Dtd = SgmlDtd.Parse(null, "OFX", new StreamReader(docType), null, null, null),
             };
 
             var sw = new StringWriter();
